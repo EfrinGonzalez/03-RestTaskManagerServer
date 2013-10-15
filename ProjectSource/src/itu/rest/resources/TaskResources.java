@@ -41,7 +41,23 @@ public class TaskResources {
 	      throw new RuntimeException("Get: Todo with " + id +  " not found");
 	    return task;
 	  }*/
-	// for the browser
+	  
+	  
+	// for the browser. This will serve data to tasksResources class
+	//Application integration     
+	  @GET
+	  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	  public List<Task> getSetOfTasksById() throws FileNotFoundException, JAXBException {
+		  List<Task> task = new ArrayList<Task>();
+		   task = TaskManagerDaoEnum.instance.getSetOfTasks(id);
+	 //   Todo todo = TodoDao.instance.getModel().get(id);
+	    if(task==null)
+	      throw new RuntimeException("Get: Todo with " + id +  " not found");
+	    return task;
+
+	  }
+	  
+	// for the browser. This will serve data to tasksResources class
 		  @GET
 		  @Produces(MediaType.TEXT_XML)
 		  public List<Task> getSetOfTasksByIdHTML() throws FileNotFoundException, JAXBException {
@@ -52,11 +68,5 @@ public class TaskResources {
 		      throw new RuntimeException("Get: Todo with " + id +  " not found");
 		    return task;
 
-		  
-		  /* 
-	    
-	   tasks = TaskManagerDaoEnum.instance.getAllTasks();
-	    return tasks; 
-	  }*/
 		  }
 }
