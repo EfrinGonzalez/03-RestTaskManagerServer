@@ -15,41 +15,26 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBException;
 
-public class TaskResources {
+public class TaskResourcesId {
 	@Context
 	  UriInfo uriInfo;
 	  @Context
 	  Request request;
 	  String id;
-	  
-	  public TaskResources(UriInfo uriInfo, Request request, String id){
+	  String name;  
+	  public TaskResourcesId(UriInfo uriInfo, Request request, String id){
 		  this.uriInfo = uriInfo;
 		    this.request = request;
 		    this.id = id;
-		  
+		    
 	  }
 	  
-	  // for the browser
-	  //This works for retreiveing one single task by id
-	  /*
-	  @GET
-	  @Produces(MediaType.TEXT_XML)
-	  public Task getTaskHTML() throws FileNotFoundException, JAXBException {
-		Task task = TaskManagerDaoEnum.instance.getTask(id);  
-	 //   Todo todo = TodoDao.instance.getModel().get(id);
-	    if(task==null)
-	      throw new RuntimeException("Get: Todo with " + id +  " not found");
-	    return task;
-	  }*/
-	  
-	  
-	// for the browser. This will serve data to tasksResources class
 	//Application integration     
 	  @GET
 	  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	  public List<Task> getSetOfTasksById() throws FileNotFoundException, JAXBException {
 		  List<Task> task = new ArrayList<Task>();
-		   task = TaskManagerDaoEnum.instance.getSetOfTasks(id);
+		   task = TaskManagerDaoEnum.instance.getSetOfTasksById(id);
 	 //   Todo todo = TodoDao.instance.getModel().get(id);
 	    if(task==null)
 	      throw new RuntimeException("Get: Todo with " + id +  " not found");
@@ -62,11 +47,13 @@ public class TaskResources {
 		  @Produces(MediaType.TEXT_XML)
 		  public List<Task> getSetOfTasksByIdHTML() throws FileNotFoundException, JAXBException {
 			  List<Task> task = new ArrayList<Task>();
-			   task = TaskManagerDaoEnum.instance.getSetOfTasks(id);
+			   task = TaskManagerDaoEnum.instance.getSetOfTasksById(id);
 		 //   Todo todo = TodoDao.instance.getModel().get(id);
 		    if(task==null)
 		      throw new RuntimeException("Get: Todo with " + id +  " not found");
 		    return task;
 
 		  }
+		  
+		
 }

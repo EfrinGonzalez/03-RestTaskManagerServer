@@ -47,9 +47,11 @@ public List<Task> getAllTasks() throws FileNotFoundException, JAXBException{
    return tasks;
 }
 
+
+//------------------
 //This function works perfectly by passing one id. It retrieves exactly one tasks
 //in the next function we try to retrieve the set of tasks with certain id
-/*public Task getTask(String id) throws FileNotFoundException, JAXBException{
+public Task getTaskByIdName(String id, String name) throws FileNotFoundException, JAXBException{
 	//Check this line
 		//FileInputStream stream = new FileInputStream("/WEB-INF/task-manager-xml.xml");
 		
@@ -64,13 +66,72 @@ public List<Task> getAllTasks() throws FileNotFoundException, JAXBException{
 	     
 	         while (listIterator.hasNext()) {
 	        	 Task task = listIterator.next();
-	        	 if(task.id.equals(id)){
+	        	 if(task.id.equals(id)&& task.name.equals(name)){
 	        		 return task;
 	        	 }
 	         }     
 return null;	   
-}*/
-public List<Task> getSetOfTasks(String id) throws FileNotFoundException, JAXBException{
+}
+
+public Task updateTaskByIdName(	String id,
+								String name, 
+								String date,
+								String status,
+								String required,
+								String description,
+								String attendants)throws JAXBException, IOException{
+	//Check this line
+			//FileInputStream stream = new FileInputStream("/WEB-INF/task-manager-xml.xml");
+			
+			FileInputStream stream = new FileInputStream("C:/Users/Efrin Gonzalez/Documents/task-manager-xml.xml");
+			String path="C:/Users/Efrin Gonzalez/Documents/task-manager-xml.xml";
+			// create an instance context class, to serialize/deserialize.
+			JAXBContext jaxbContext = JAXBContext.newInstance(Cal.class);
+			// Deserialize university xml into java objects.
+		     Cal cal = (Cal) jaxbContext.createUnmarshaller().unmarshal(stream);
+
+		    //With the iterator we can full fill the list that will be sent in response
+		     ListIterator<Task> listIterator = cal.tasks.listIterator(); 
+		     int existingTask = 0;
+		         while (listIterator.hasNext()) {
+		        	 Task task = listIterator.next();
+		        	 if(task.id.equals(id)&& task.name.equals(name)){
+		        		deleteTask(id, name);
+		        		
+		        		
+		        		existingTask=1;
+		        	 }
+		        	 
+		        	 if (existingTask == 1){
+		        		//preparing the updated object to be written
+			        		task.id = id;
+			        		task.name = name;
+			        		task.date = date;
+			        		task.status=status;
+			        		task.required=required;
+			        		task.description=description;
+			        		task.attendants=attendants;
+		     			cal.tasks.add(task);					
+		     			 // Serialize university object into xml.            
+		     	        StringWriter writer = new StringWriter();
+
+		     	        // We can use the same context object, as it knows how to 
+		     	        //serialize or deserialize University class.
+		     	        jaxbContext.createMarshaller().marshal(cal, writer);				       
+		     	       SaveFile(writer.toString(), path);	       
+		     	      System.out.println("The task id: "+ id +" name: "+name+" has been saved. ");
+		     		}
+		        	 System.out.println("The task: "+id+" name: "+name+ " has been updated");
+		         }     
+	return null;	 
+	
+	
+		
+		
+}
+//------------------
+
+public List<Task> getSetOfTasksById(String id) throws FileNotFoundException, JAXBException{
 	//Check this line
 		//FileInputStream stream = new FileInputStream("/WEB-INF/task-manager-xml.xml");
 		
@@ -95,15 +156,7 @@ public List<Task> getSetOfTasks(String id) throws FileNotFoundException, JAXBExc
 }
 
 
-/*
- * //With the iterator we can full fill the list that will be sent in response
-     ListIterator<Task> listIterator = cal.tasks.listIterator(); 
-     List<Task> tasks = new ArrayList<Task>();
-         while (listIterator.hasNext()) {
-             //Every time there is a new task, it will be stored in the arraylist
-             tasks.add(listIterator.next());
-         }     
-   return tasks;*/
+
 
 
 	//Ready to make a post
@@ -146,7 +199,7 @@ public List<Task> getSetOfTasks(String id) throws FileNotFoundException, JAXBExc
 		 //With the iterator we can full fill the list that will be sent in response
 	     ListIterator<Task> listIterator = cal.tasks.listIterator(); 
 	     //list to full fill with the requested id
-	     List<Task> tasksList = new ArrayList<Task>();
+	     //List<Task> tasksList = new ArrayList<Task>();
 	     int existingTask=0;   //flag to see whether the element exist 
 	     while (listIterator.hasNext()) {	   
 	    	 Task taskList = listIterator.next();
@@ -170,7 +223,45 @@ public List<Task> getSetOfTasks(String id) throws FileNotFoundException, JAXBExc
 	}
 	
 
-   
+   public Boolean deleteTask(String id, String name) throws JAXBException, IOException{
+	   Boolean deleted=false;
+	 //trying to write into file
+	 		FileInputStream stream = new FileInputStream("C:/Users/Efrin Gonzalez/Documents/task-manager-xml.xml");
+	 		String path="C:/Users/Efrin Gonzalez/Documents/task-manager-xml.xml";
+	 		
+	 		//First Let's try to get all the info from the file and the include the new info		
+	 		JAXBContext jaxbContext = JAXBContext.newInstance(Cal.class);
+	 		// Deserialize university xml into java objects.
+	 	     Cal cal = (Cal) jaxbContext.createUnmarshaller().unmarshal(stream);
+
+	 		//if the task does not existe, let's add it
+			 //With the iterator we can full fill the list that will be sent in response
+		     ListIterator<Task> listIterator = cal.tasks.listIterator(); 
+		     //list to full fill with the requested id
+		  //   List<Task> tasksList = new ArrayList<Task>();
+		     int existingTask = 0;
+		     while (listIterator.hasNext()) {	   
+		    	 Task task = listIterator.next();
+		        	 if((task.id.equals(id))&&(task.name.equals(name)) ){
+		        		 existingTask =1;
+		        		 System.out.println("The task id: "+ id +" name: "+name+"  exist.");
+		        		 deleted = true;
+		        	 }
+		        	 if (existingTask == 1){
+		 				cal.tasks.remove(task);					
+		 				 // Serialize university object into xml.            
+		 		        StringWriter writer = new StringWriter();
+
+		 		        // We can use the same context object, as it knows how to 
+		 		        //serialize or deserialize University class.
+		 		        jaxbContext.createMarshaller().marshal(cal, writer);				       
+		 		       SaveFile(writer.toString(), path);	       
+		 		      System.out.println("The task id: "+ id +" name: "+name+" has been deleted. ");}
+		        	 return deleted;
+		         }    
+			return false;
+			
+   }
 
 	private static void SaveFile(String xml, String path) throws IOException {
         File file = new File(path);    	
