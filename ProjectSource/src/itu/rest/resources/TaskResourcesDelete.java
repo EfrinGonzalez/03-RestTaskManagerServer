@@ -34,28 +34,28 @@ public class TaskResourcesDelete {
 		    this.name = name;
 	  }
 	  
-	  @DELETE
+	  //@DELETE
 	  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	  public boolean deletingTask() throws JAXBException, IOException {
+	  public void deletingTask() throws JAXBException, IOException {
 		
-				Boolean taskDeleted = TaskManagerDaoEnum.instance.deleteTask(id, name);  
-				if(taskDeleted==false)
-				      throw new RuntimeException("Task: " + id + "Name: " + name + " not found");
-				    return taskDeleted;
-	    
+				//Boolean taskDeleted = 		  TaskManagerDaoEnum.instance.deleteTask(id, name);  
+				//if(taskDeleted==false)
+				  //    throw new RuntimeException("Task: " + id + "Name: " + name + " not found");
+				   // return taskDeleted;
+		  TaskManagerDaoEnum.instance.deleteTask(id, name);
 	  }
 	  
 	  // for the browser
 	  //This works for retreiveing one single task by id
 	  
-	  @DELETE
+	//  @DELETE
 	  @Produces(MediaType.TEXT_XML)
-	  public boolean deletingTaskHtml() throws JAXBException, IOException {
-			
-		  Boolean taskDeleted = TaskManagerDaoEnum.instance.deleteTask(id, name);  
-			if(taskDeleted==false)
-			      throw new RuntimeException("Task: " + id + "Name: " + name + " not found");
-			    return taskDeleted;
+	  public void deletingTaskHtml() throws JAXBException, IOException {
+		  TaskManagerDaoEnum.instance.deleteTask(id, name);
+		  //Boolean taskDeleted = TaskManagerDaoEnum.instance.deleteTask(id, name);  
+			//if(taskDeleted==false)
+			  //    throw new RuntimeException("Task: " + id + "Name: " + name + " not found");
+			   // return taskDeleted;
 
   
 }

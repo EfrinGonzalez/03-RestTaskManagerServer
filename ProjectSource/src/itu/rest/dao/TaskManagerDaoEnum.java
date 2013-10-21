@@ -93,17 +93,40 @@ public Task updateTaskByIdName(	String id,
 		    //With the iterator we can full fill the list that will be sent in response
 		     ListIterator<Task> listIterator = cal.tasks.listIterator(); 
 		     int existingTask = 0;
+		     Task task = null;
 		         while (listIterator.hasNext()) {
-		        	 Task task = listIterator.next();
+		        	 task = listIterator.next();
 		        	 if(task.id.equals(id)&& task.name.equals(name)){
-		        		deleteTask(id, name);
+		        		
+		        		 //deleteTask(id, name);		        		
 		        		
 		        		
-		        		existingTask=1;
-		        	 }
-		        	 
-		        	 if (existingTask == 1){
+		     			cal.tasks.remove(task);
+		     			
+		     			//existingTask=1;
+		        		 task.id = id;
+			        		task.name = name;
+			        		task.date = date;
+			        		task.status=status;
+			        		task.required=required;
+			        		task.description=description;
+			        		task.attendants=attendants;
+		     			cal.tasks.add(task);					
+		     			
+		     			 // Serialize university object into xml.            
+		     	        StringWriter writer = new StringWriter();
+
+		     	        // We can use the same context object, as it knows how to 
+		     	        //serialize or deserialize University class.
+		     	        jaxbContext.createMarshaller().marshal(cal, writer);				       
+		     	       SaveFile(writer.toString(), path);	       
+		     	      System.out.println("The task id: "+ id +" name: "+name+" has been updated. inside update method ");
+		        		}
+		        	 }  
+		         
+		        /* if (existingTask == 1){
 		        		//preparing the updated object to be written
+		        		 //
 			        		task.id = id;
 			        		task.name = name;
 			        		task.date = date;
@@ -119,10 +142,12 @@ public Task updateTaskByIdName(	String id,
 		     	        //serialize or deserialize University class.
 		     	        jaxbContext.createMarshaller().marshal(cal, writer);				       
 		     	       SaveFile(writer.toString(), path);	       
-		     	      System.out.println("The task id: "+ id +" name: "+name+" has been saved. ");
-		     		}
-		        	 System.out.println("The task: "+id+" name: "+name+ " has been updated");
-		         }     
+		     	      System.out.println("The task id: "+ id +" name: "+name+" has been saved. inside update method ");
+		     		}*/
+		        	// System.out.println("The task: "+id+" name: "+name+ " has been updated. inside update method");
+
+		         
+		         
 	return null;	 
 	
 	
@@ -223,7 +248,7 @@ public List<Task> getSetOfTasksById(String id) throws FileNotFoundException, JAX
 	}
 	
 
-   public Boolean deleteTask(String id, String name) throws JAXBException, IOException{
+   public void deleteTask(String id, String name) throws JAXBException, IOException{
 	   Boolean deleted=false;
 	 //trying to write into file
 	 		FileInputStream stream = new FileInputStream("C:/Users/Efrin Gonzalez/Documents/task-manager-xml.xml");
@@ -244,7 +269,7 @@ public List<Task> getSetOfTasksById(String id) throws FileNotFoundException, JAX
 		    	 Task task = listIterator.next();
 		        	 if((task.id.equals(id))&&(task.name.equals(name)) ){
 		        		 existingTask =1;
-		        		 System.out.println("The task id: "+ id +" name: "+name+"  exist.");
+		        		 System.out.println("The task id: "+ id +" name: "+name+"  exist. inside delete method");
 		        		 deleted = true;
 		        	 }
 		        	 if (existingTask == 1){
@@ -256,10 +281,10 @@ public List<Task> getSetOfTasksById(String id) throws FileNotFoundException, JAX
 		 		        //serialize or deserialize University class.
 		 		        jaxbContext.createMarshaller().marshal(cal, writer);				       
 		 		       SaveFile(writer.toString(), path);	       
-		 		      System.out.println("The task id: "+ id +" name: "+name+" has been deleted. ");}
-		        	 return deleted;
+		 		      System.out.println("The task id: "+ id +" name: "+name+" has been deleted. Inside delete metho");}
+		        	// return deleted;
 		         }    
-			return false;
+			//return false;
 			
    }
 

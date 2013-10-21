@@ -39,6 +39,7 @@ public class TasksResources {
 	 // Return the list of tasks to the user in the browser
 	// add this to the path in the browser: rest/tasks
 	  @GET
+	  @Path("/get/")
 	  @Produces(MediaType.TEXT_XML)	  
 	  public List<Task> getTasksBrowser() throws FileNotFoundException, JAXBException {
 	    List<Task> tasks = new ArrayList<Task>();
@@ -51,6 +52,7 @@ public class TasksResources {
 	// Return the list of tasks to the user in the applicatoin
 		// 
 		  @GET
+		  @Path("/get/")
 		  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})	  
 		  public List<Task> getTasks() throws FileNotFoundException, JAXBException {
 		    List<Task> tasks = new ArrayList<Task>();
@@ -61,7 +63,7 @@ public class TasksResources {
 	  
 		  //This function gets the number of tasks within the xml file
 	 @GET
-	  @Path("count")
+	  @Path("/get/count/")
 	  @Produces(MediaType.TEXT_PLAIN)
 	 // add this to the path in the browser: rest/tasks/count
 	 public String getCount() throws FileNotFoundException, JAXBException{
@@ -75,7 +77,7 @@ public class TasksResources {
 	  // Allows to type ../rest/tasks/1
 	  // 1 will be treaded as parameter task and passed to TaskResources
 	 
-	  @Path("{taskId}")
+	  @Path("/get/{taskId}")
 	 public TaskResourcesId getSetOfTasksById(@PathParam("taskId") String id){
 		 return new TaskResourcesId(uriInfo, request, id);
 		 //this info is sent to getSetOfTasksByIdHTML in TaskResouces Class
@@ -86,7 +88,7 @@ public class TasksResources {
 	  // e.g. ServletContext, Request, Response, UriInfo
 	 
 	 // ../rest/tasks/taskId/name
-	  @Path("{taskId}/{taskName}")
+	  @Path("/get/{taskId}/{taskName}")
 		 public TaskResourcesIdName getTasksByIdName(@PathParam("taskId") String id, 
 				 							   @PathParam("taskName") String name){
 			 return new TaskResourcesIdName(uriInfo, request, id, name);
@@ -94,16 +96,17 @@ public class TasksResources {
 		 }
 	  
 	  //this method is not working now
-	  @DELETE
-	  @Path("/delete/{taskId}/{taskName}")
-	  @Produces(MediaType.TEXT_XML)
+	 
+	/*  @Path("/delete/{taskId}/{taskName}")
+	 // @Produces(MediaType.TEXT_XML)
 	  public TaskResourcesDelete deleteTask(@PathParam("taskId") String id, 
 			   				@PathParam("taskName") String name){
 		  return new TaskResourcesDelete(uriInfo, request, id, name);
 	  }
-	  /*
+	  */
 	  //--------------------
-	  @POST 
+	 @POST
+	 @Path("/delete/")
 	  @Produces(MediaType.TEXT_HTML)
 	  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	  public void deleteTask(@FormParam("id") String id,
@@ -113,9 +116,16 @@ public class TasksResources {
 	 TaskManagerDaoEnum.instance.deleteTask(id, name);
 	 servletResponse.sendRedirect("../delete_task.html");
 	 
-	  }*/
+	  }
+	 
+	 
+	 //----
+	
+	 
+	  
 	  //--------------------
 	  @POST 
+	  @Path("/create/")
 	  @Produces(MediaType.TEXT_HTML)
 	  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	  public void newTask(	@FormParam("id") String id,
@@ -133,7 +143,8 @@ public class TasksResources {
 	  }
 	  
 	  
-	  @PUT 
+	  @POST
+	  @Path("/update/")
 	  @Produces(MediaType.TEXT_HTML)
 	  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	  public void updateTask(	@FormParam("id") String id,
