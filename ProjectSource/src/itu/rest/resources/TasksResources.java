@@ -40,7 +40,7 @@ public class TasksResources {
 	// add this to the path in the browser: rest/tasks
 	  @GET
 	  @Path("/get/")
-	  @Produces(MediaType.TEXT_XML)	  
+	  @Produces(MediaType.TEXT_XML)	 	  	  
 	  public List<Task> getTasksBrowser() throws FileNotFoundException, JAXBException {
 	    List<Task> tasks = new ArrayList<Task>();
 	    
