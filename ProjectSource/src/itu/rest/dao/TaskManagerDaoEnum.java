@@ -18,7 +18,6 @@ import javax.ws.rs.FormParam;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-//smaaaall test, just work thank you
 
 
 //In this class all the information is retrieved and sent to TasksResources class that serves to the browser
